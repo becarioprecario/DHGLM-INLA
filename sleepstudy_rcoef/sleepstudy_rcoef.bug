@@ -1,0 +1,17 @@
+model {
+  for(i in 1:n) {
+    y[i] ~ dnorm(mu[i], prec[grp[i]])
+    mu[i] <- beta + delta[grp[i]] * x_mean[i]
+  }
+
+  for(j in 1:ngroups) {
+    delta[j] ~ dnorm(0, precd)
+    reff[j] ~ dnorm(0, precu)
+    log(prec[j]) <- gamma + reff[j]
+  }
+
+  beta ~ dnorm(0, 0.001)
+  gamma ~ dnorm(0, 0.001)
+  precu ~ dgamma(0.01, 0.01)
+  precd ~ dgamma(1, 0.00005)
+}
