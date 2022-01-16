@@ -1,0 +1,14 @@
+model {
+
+  for(i in 1:n) {
+    y[i] ~ dnorm(mu[i], prec[i])
+    mu[i] <- beta[1] + beta[2] * x_mean1[i]
+    log(prec[i]) <- gamma[1] + gamma[2] * g_x_prec1[i]
+  }
+
+  beta[1] ~ dnorm(0, 0.001)
+  beta[2] ~ dnorm(0, 0.001)
+  gamma[1] ~ dnorm(0, 0.001)
+  gamma[2] ~ dnorm(0, 0.001)
+
+}

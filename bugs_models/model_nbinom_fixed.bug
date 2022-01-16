@@ -1,0 +1,13 @@
+model {
+  for(i in 1:n) {
+    y[i] ~ dnegbin(p[i], size[i])
+    p[i] <- size[i]/(size[i] + mu[i])
+    log(mu[i]) <- beta[1] + beta[2] * x_mean1[i]
+    size[i] <- exp(gamma[1] + 0 * gamma[2]) 
+  }
+
+  beta[1] ~ dnorm(0, 0.001)
+  beta[2] ~ dnorm(0, 0.001)
+  gamma[1] ~ dnorm(0, 0.001)
+  gamma[2] ~ dnorm(0, 0.001)
+}
