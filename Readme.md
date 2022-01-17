@@ -1,7 +1,7 @@
 # Introduction
 
 This repository contains the `R` code for paper *Fitting Double Hierarchical Models with the Integrated Nested Laplace
- Approximation* by Morales-Otero et al. (2022) ([arXiv prep-rpint]()). The diffferent folders conatin the following examples:
+ Approximation* by Morales-Otero et al. (2022) ([arXiv pre-print]()). The diffferent folders conatin the following examples:
 
 * `Poisson`: Poisson model with random effects and a hierarchical structure on the precision of the random effects.
 
