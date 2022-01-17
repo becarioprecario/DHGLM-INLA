@@ -73,7 +73,7 @@ summ.is
 # Load coda samples
 #load("coda_colnb.Rda")
 source("../bugs_models/to_coda_samples.R")
-coda_colnb <- to_coda_samples(js)
+coda_colnb <- to_coda_samples(js) 
 
 
 # Traceplots and density plots for the estimated parameters
