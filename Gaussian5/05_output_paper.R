@@ -126,7 +126,10 @@ summ.is6
 ############## Summary stats from MCMC
 
 # Load coda samples
-load("coda_simgauss5.Rda")
+#load("coda_simgauss5.Rda")
+source("../bugs_models/to_coda_samples.R")
+coda_simgauss5 <- to_coda_samples(js) #[c("beta", "gamma", "precu")])
+
 
 # Traceplots and density plots for the estimated parameters
 dev.new(height = 6, width = 9)
