@@ -70,7 +70,10 @@ summ.is
 ############## Summary stats from MCMC
 
 # Load coda samples
-load("coda_poi.Rda")
+#load("coda_poi.Rda")
+source("../bugs_models/to_coda_samples.R")
+coda_poi <- to_coda_samples(js[c("beta", "gamma")])
+
 
 # Traceplots and density plots for the estimated parameters
 dev.new(height = 6, width = 9)
