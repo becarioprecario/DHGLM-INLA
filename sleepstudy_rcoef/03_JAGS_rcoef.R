@@ -31,7 +31,7 @@ update(jm, n.iter = 10000)
 # Samples for inference
 js <- jags.samples(jm,
   variable.names = params,
-  n.iter = 100000, n.thin = 100
+  n.iter = 100000, thin = 100
 )
 
 js
