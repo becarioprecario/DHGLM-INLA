@@ -17,6 +17,6 @@ update(jm, n.iter = 10000)
 
 # Sample from model
 js <- jags.samples(jm, variable.names = c("beta", "gamma", "size"),
-  n.iter = 100000, n.thin = 100)
+  n.iter = 100000, thin = 100)
 
 save(file = "JAGS.RData", list = ls())
