@@ -1,0 +1,100 @@
+# Fit negative binomial model with AMIS
+
+# Load libraries
+library(spdep)
+library(INLA)
+
+# Load data
+load("data.RData")
+
+# Load AMIS functions
+source("../genFuncs.R")
+source("../inlaAMIS.R")
+
+# Define prior for parameters
+prior <- function(x, log = TRUE) {
+  if(log == TRUE) {
+    res <- sum(dnorm(x, mean = 0, sd = sqrt(1 / 0.001), log = log))
+  } else {
+    res <- prod(dnorm(x, mean = 0, sd = sqrt(1 / 0.001), log = log))
+  }
+  return(res)
+}
+
+# Define proposal distribution
+# Density
+dprop <- function(y, x, sigma = diag(5, 2, 2), log = TRUE) {
+  return(mvtnorm::dmvnorm(y, mean = x, sigma = sigma, log = log))
+}
+
+# Sampling random values
+rprop <- function(x, sigma = diag(5,2,2)){
+  return(mvtnorm::rmvnorm(1, mean=x, sigma = sigma))
+}
+
+
+# Fit INLA model
+fit_model <- function(data, g_values) {
+  # Values of gamma_0 and gamma_1
+  #g_values <- samples[1, ]
+  
+  # Precision of random effect
+  log_size <-  g_values[1] + g_values[2] * data$x_prec1
+  
+  # Fit INLA model (no random effect)
+  #m0 <- inla(y ~ 1 + x_mean1, data = d, family = "poisson")
+  #summary(m0)
+  
+  # Prior for the precision 
+  hyper_size <- lapply(log_size, function(X) {
+    list(hyper = list(size = list(initial = X, fixed = TRUE)))
+  })
+  
+  Y <- matrix(NA, n, n)
+  diag(Y) <- data$y
+  
+  # Fit INLA model (no random effect)
+  m1 <- inla(Y ~ 1  + offset(log(offset1)) + x_mean1,
+    data = list(Y = Y, x_mean1 = data$x_mean1), 
+    family = rep("nbinomial", n),
+    num.threads = "1:1",
+    control.fixed = list(prec.intercept = 0.001),
+    control.family = hyper_size)
+  #summary(m1)
+  
+  res <- list(mlik = m1$mlik[1, 1],
+              dists = m1$marginals.fixed
+  )
+  
+  return(res)
+}
+
+# Fit model with equal sizes
+m1 <- inla(y ~ 1  + offset(log(offset1)) + x_mean1,
+  data = d,
+  family = "nbinomial")
+
+# Set parameters for sampling distribution
+# Vague distribution
+init <- list(mu = c(0, 0), 
+             cov = diag(2, 2, 2)
+)
+# Infomred parameters 
+init <- list(
+  mu = c(m1$internal.summary.hyperpar[1, "mean"], 0),
+  cov = diag(c(2, 2), 2, 2)
+)
+
+# Number of samples
+N0 <- 5000 #Initial step
+Nt <- rep(1000, 10) #Adaptations
+
+# Fit model using AMIS
+set.seed(1)
+res_time <- system.time(
+  res <- inlaAMIS(data = d, init = init, prior = prior, d.prop = dprop, 
+    r.prop = rprop, fit.inla = fit_model, N_t = Nt,
+    N_0 = N0, ncores = 60)
+)
+
+save(file = "AMIS_NB.RData", list = ls())
