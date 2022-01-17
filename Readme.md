@@ -29,4 +29,4 @@ tput.
 
 * `05_output_paper.R`: Script to produce some summary results and the plots included in the paper.
 
-
+Folder `bugs_models` contains that BUGS models used to in the different examples and an `R` file with funcntion `to_coda_samples()` to convert the JAGS output into a `coda` object.
