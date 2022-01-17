@@ -70,7 +70,9 @@ summ.is
 ############## Summary stats from MCMC
 
 # Load coda samples
-load("coda_sleepstudy.Rda")
+#load("coda_sleepstudy.Rda")
+source("../bugs_models/to_coda_samples.R")
+coda_sleepstudy <- to_coda_samples(js)
 
 # Traceplots and density plots for the estimated parameters
 
