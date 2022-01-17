@@ -73,6 +73,14 @@ summ.is
 source("../bugs_models/to_coda_samples.R")
 coda_sleepstudy_rcoef <- to_coda_samples(js)
 
+# Show dim. names
+dimnames(coda_sleepstudy_rcoef[[1]])
+
+# Index to extract data
+idx_vars <- as.integer(sapply(rownames(summ.is), function(X) {
+  which(X == dimnames(coda_sleepstudy_rcoef[[1]])[[2]])
+}))
+
 # Traceplots and density plots for the estimated parameters
 
 dev.new(height = 6, width = 9)
@@ -81,7 +89,7 @@ dev.new(height = 6, width = 9)
 denplot(coda_sleepstudy_rcoef, parms=c("beta","precd","gamma", "precu"))
 
 # Show estimated parameters (Mean, SD and 95% Credible Interval)
-summ.mcmc <- cbind(summary(coda_sleepstudy_rcoef)$statistics[c(1,21,2,22),c(1,2)],summary(coda_sleepstudy_rcoef)$quantiles[c(1,21,2,22),c(1,5)])
+summ.mcmc <- cbind(summary(coda_sleepstudy_rcoef)$statistics[idx_vars, c(1,2)],summary(coda_sleepstudy_rcoef)$quantiles[idx_vars, c(1,5)])
 summ.mcmc
 
 
