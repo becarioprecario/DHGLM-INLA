@@ -29,4 +29,6 @@ tput.
 
 * `05_output_paper.R`: Script to produce some summary results and the plots included in the paper.
 
+* `06_graph_diag.R`: Script to produce the plots with the graphical diagnostics (included in the Supplementary Materials).
+
 Folder `bugs_models` contains the BUGS models used to in the different examples and an `R` file with function `to_coda_samples()` to convert the JAGS output into a `coda` object.

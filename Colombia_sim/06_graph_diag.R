@@ -1,0 +1,78 @@
+#### Graphical diagnostics
+
+
+################## Poisson
+
+####### Load results
+load("AMIS_PO.RData")
+
+####### Re-scaled weights
+ww <- res$weight / sum(res$weight)
+summary(ww)
+
+
+# Diagnostic plot
+# ww: weights
+# smp: Sample (variables by column)
+d_plot <- function(ww, smp ) {
+  
+  # Number of variables
+  n.var <- ncol(smp)
+  n.samples <- nrow(smp)
+  
+  for(i in 1:n.var) {
+    # Reorder weights
+    idx <- order(smp[, i])
+    plot(1:n.samples / n.samples, cumsum(ww[idx]),
+         main = bquote(gamma[~ .(i)]), type = "l",
+         xlab = "Theoretical cumulative distribution",
+         ylab = "Empirical cumulative distribution")
+    abline(0, 1, lty = 2)
+  }
+}
+
+
+pdf("graph_diag_colpoisson.pdf", width=7, height=4)
+par(mfrow = c(1, 2))
+d_plot(ww, res$eta)
+dev.off()
+
+
+rm(list = ls())
+
+################## Negative binomial
+
+####### Load results
+load("AMIS_NB.RData")
+
+####### Re-scaled weights
+ww <- res$weight / sum(res$weight)
+summary(ww)
+
+
+# Diagnostic plot
+# ww: weights
+# smp: Sample (variables by column)
+d_plot <- function(ww, smp ) {
+  
+  # Number of variables
+  n.var <- ncol(smp)
+  n.samples <- nrow(smp)
+  
+  for(i in 1:n.var) {
+    # Reorder weights
+    idx <- order(smp[, i])
+    plot(1:n.samples / n.samples, cumsum(ww[idx]),
+         main = bquote(gamma[~ .(i)]), type = "l",
+         xlab = "Theoretical cumulative distribution",
+         ylab = "Empirical cumulative distribution")
+    abline(0, 1, lty = 2)
+  }
+}
+
+
+pdf("graph_diag_colnb.pdf", width=7, height=4)
+par(mfrow = c(1, 2))
+d_plot(ww, res$eta)
+dev.off()
+
